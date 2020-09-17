@@ -8,11 +8,19 @@ class TrackType(DjangoObjectType):
   class Meta:
     model = Track
     
+class LikeType(DjangoObjectType):
+  class Meta:
+    model = Like
+    
 class Query(graphene.ObjectType):
   tracks = graphene.List(TrackType)
+  likes = graphene.List(LikeType)
   
   def resolve_tracks(self, info):
     return Track.objects.all()
+  
+  def resolve_likes(self, info):
+    return Like.objects.all()
   
 class CreateTrack(graphene.Mutation):
    track = graphene.Field(TrackType)
@@ -29,6 +37,7 @@ class CreateTrack(graphene.Mutation):
     track = Track(title=title, description=description, url=url, posted_by=user)
     track.save()
     return CreateTrack(track=track)
+  
 class DeleteTrack(graphene.Mutation):
   track_id = graphene.Int()
   
@@ -43,7 +52,6 @@ class DeleteTrack(graphene.Mutation):
       raise Exception('Not permitted to delte this track')
     
     track.delete()
-      
     return DeleteTrack(track_id=track_id)
   
 class UpdateTrack(graphene.Mutation):
