@@ -64,7 +64,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST =  (
-    'lovalhost:3000'
+    'localhost:3000'
 )
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
