@@ -31,15 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
     'django.contrib.admin',
+    'corsheaders',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'tracks'
+    'tracks',
 ]
 
 GRAPHENE = {
@@ -50,8 +50,8 @@ GRAPHENE = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.common.commonmiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,9 +63,11 @@ MIDDLEWARE = [
 
 ]
 
-CORS_ORIGIN_WHITELIST =  (
-    'localhost:3000'
-)
+CORS_ORIGIN_WHITELIST =  [
+    'http://localhost:3000',
+    'http://localhost:8000',
+]
+
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
