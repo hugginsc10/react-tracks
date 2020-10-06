@@ -18,6 +18,8 @@ import Slide from "@material-ui/core/Slide";
 import Gavel from "@material-ui/icons/Gavel";
 import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
 import Error from "../Shared/Error";
+
+
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
@@ -28,7 +30,7 @@ const Register = ({ classes, setNewUser }) => {
    const [password, setPassword] = useState("")
    const [open, setOpen] = useState(false)
 
-  const handleSubmit = (event, createUser) => {
+   const handleSubmit = (event, createUser) => {
     event.preventDefault();
     createUser()
   };
@@ -54,7 +56,7 @@ const Register = ({ classes, setNewUser }) => {
           
             return (
               <form
-                onSubmit={event => handleSubmit(createUser)}
+                onSubmit={event => handleSubmit(event, createUser)}
                 className={classes.form}
               >
                 <FormControl margin="normal" required fullWidth>
