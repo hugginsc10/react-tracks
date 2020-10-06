@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Mutation } from 'react-apollo'
+import { gql } from "apollo-boost"
+import axios from 'axios'
 import withStyles from "@material-ui/core/styles/withStyles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,18 +16,47 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
-
+import Error from '../Shared/Error'
 const CreateTrack = ({ classes }) => {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [file, setFile] = useState("")
+  const [submitting, setSubmitting] = useState(false)
 
   const handleAudioChange = event => {
     const selectedFile = event.target.files[0]
     setFile(selectedFile);
   }
 
+  const handleAudioUpload = async () => {
+    try {
+
+      const data = new FormData()
+      data.append('file', file)
+      data.append('resource_type', 'raw')
+      data.append('upload_preset', 'react-tracks')
+      data.append('cloud_name', 'vacheron')
+      const res = await axios.post('https://api.cloudinary.com/v1_1/vacheron/raw/upload', data)
+      return res.data.url
+    } catch (err) {
+      console.error('Error uploading file', err)
+      setSubmitting(false)
+    }
+
+  }
+
+  const handleSubmit = async (event, createTrack) => {
+    event.preventDefault()
+    setSubmitting(true)
+    const uploadedUrl = await handleAudioUpload()
+    createTrack({
+      variables: {
+        title,
+        description,
+        url: uploadedUrl
+    }})
+  }
   return (
     <>
       <Button
@@ -35,9 +67,20 @@ const CreateTrack = ({ classes }) => {
       >
         {open ? <ClearIcon /> : <AddIcon />}
       </Button>
-
-      <Dialog className={classes.dialog}>
-        <form>
+      <Mutation 
+        mutation={CREATE_TRACK_MUTATION}
+        onCompleted={data => {
+          console.log({ data })
+          setSubmitting(false)
+          setOpen(false)
+          
+        }}>
+        {(createTrack, { loading, error }) => {
+          if (error) return <Error error={error}/>
+          return (
+          
+      <Dialog open={open} className={classes.dialog}>
+        <form onSubmit={event => handleSubmit(event, createTrack)}>
           <DialogTitle>Create Track</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -83,7 +126,8 @@ const CreateTrack = ({ classes }) => {
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button
+             <Button
+              disabled={submitting}
               onClick={() => setOpen(false)}
               className={classes.cancel}
             >
@@ -91,18 +135,43 @@ const CreateTrack = ({ classes }) => {
             </Button>
             <Button
               disabled={
-                !title.trim() || !description.trim() || !file.trim()
+                      !title.trim() ||
+                      !description.trim() ||
+                      !file ||
+                      submitting
               }
               type="submit"
               className={classes.save}>
-              Add Track
+                    {submitting ? (
+                      <CircularProgress
+                        className={classes.save}
+                        size={24} /> ) : ("Add Track")}
+                )
+                           
               </Button>
           </DialogActions>
         </form>
-      </Dialog>
+          </Dialog>
+        )
+        }}
+    </Mutation>
     </>
   )
 };
+
+const CREATE_TRACK_MUTATION = gql`
+  mutation ($title: String!, $description: String!, $url: String!) {
+    createTrack(title: $title, description: $description, url: $url)
+    {
+      track {
+        id
+        title
+        description
+        url
+      }
+    }
+  }
+`
 
 const styles = theme => ({
   container: {

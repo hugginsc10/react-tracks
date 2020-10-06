@@ -15,10 +15,9 @@ const App = ({ classes }) => {
       <SearchTracks />
       <CreateTrack />
       <Query query={GET_TRACKS_QUERY}>
-        {(data, loading, error) => {
+        {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error error={error} />
-
           return <TrackList tracks={data.tracks}/>
       }}
 

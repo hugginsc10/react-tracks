@@ -17,29 +17,32 @@ import DeleteTrack from './DeleteTrack';
 
 const TrackList = ({ classes, tracks }) => (
   <List>
-    {tracks.map(track => (
+    {tracks.map(track =>
       <ExpansionPanel key={track.id}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <ListItem className={classes.root}>
             <LikeTrack />
-            <ListItemText 
+            <ListItemText
               primaryTypographyProps={{
                 variant: 'subheading',
                 color: 'primary'
               }}
               primary={track.title}
-              secondary={
-                <Link className={classes.link} to={`/profile/${track.postedBy.id}`}>
-                  {track.postedBy.username}
-                </Link>
-              }
+              // secondary={
+              //   <Link
+              //     className={classes.link}
+              //     to={`/profile/${track.postedBy.id}`}
+              //   >
+              //     {track.postedBy.username}
+              //   </Link>
+              // }
             />
-            <AudioPlayer/>
+            <AudioPlayer />
           </ListItem>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <Typography variant='body1'>
-              {track.description}
+            {track.description}
           </Typography>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
@@ -47,7 +50,7 @@ const TrackList = ({ classes, tracks }) => (
           <DeleteTrack />
         </ExpansionPanelActions>
       </ExpansionPanel>
-    ))}
+    )}
   </List>
 )
 
