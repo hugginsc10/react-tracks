@@ -17,6 +17,8 @@ import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
 import Error from '../Shared/Error'
+import { GET_TRACKS_QUERY } from '../../pages/App'
+
 const CreateTrack = ({ classes }) => {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
@@ -67,6 +69,8 @@ const CreateTrack = ({ classes }) => {
       >
         {open ? <ClearIcon /> : <AddIcon />}
       </Button>
+
+
       <Mutation 
         mutation={CREATE_TRACK_MUTATION}
         onCompleted={data => {
@@ -74,7 +78,9 @@ const CreateTrack = ({ classes }) => {
           setSubmitting(false)
           setOpen(false)
           
-        }}>
+        }}
+        refetchQuieries={() => [{ query: GET_TRACKS_QUERY }]}
+      >
         {(createTrack, { loading, error }) => {
           if (error) return <Error error={error}/>
           return (
@@ -146,7 +152,6 @@ const CreateTrack = ({ classes }) => {
                       <CircularProgress
                         className={classes.save}
                         size={24} /> ) : ("Add Track")}
-                )
                            
               </Button>
           </DialogActions>
