@@ -17,7 +17,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import Gavel from "@material-ui/icons/Gavel";
 import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
-
+import Error from "../Shared/Error";
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
@@ -29,9 +29,9 @@ const Register = ({ classes, setNewUser }) => {
    const [open, setOpen] = useState(false)
 
   const handleSubmit = (event, createUser) => {
-    event.preventDefault()
+    event.preventDefault();
     createUser()
-  }
+  };
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -53,7 +53,10 @@ const Register = ({ classes, setNewUser }) => {
           {(createUser, { loading, error }) => {
           
             return (
-              <form onSubmit={event => handleSubmit(createUser)} className={classes.form}>
+              <form
+                onSubmit={event => handleSubmit(createUser)}
+                className={classes.form}
+              >
                 <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="username">username</InputLabel>
                   <Input
@@ -74,17 +77,18 @@ const Register = ({ classes, setNewUser }) => {
                   <Input
                     id="password"
                     type='password'
-                    onChange={event => setPassword(event.target.value)} />
+                    onChange={event => setPassword(event.target.value)}
+                  />
                 </FormControl>
                 <Button
                   type='submit'
                   fullWidth
                   variant="contained"
                   color="secondary"
-                  disabled=
-                  {loading
-                    || !username.trim()
-                    || !email.trim() ||
+                  disabled={
+                    loading ||
+                    !username.trim() ||
+                    !email.trim() ||
                     !password.trim()
                   }
                   className={classes.submit}
@@ -92,7 +96,7 @@ const Register = ({ classes, setNewUser }) => {
                   {loading ? "Registering..." : "Register"}
                 </Button>
                 <Button
-                  onCLick={() => setNewUser(false)}
+                  onClick={() => setNewUser(false)}
                   color="primary"
                   variant="outlined"
                   fullWidth
@@ -100,7 +104,7 @@ const Register = ({ classes, setNewUser }) => {
                   Previous user? Log in here
                 </Button>
                 {/* Error Handling */}
-                {error && <div>Error</div>}
+                {error && <Error error={error} />}
               </form>
             );
           }}
