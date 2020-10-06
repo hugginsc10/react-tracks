@@ -18,14 +18,19 @@ import Slide from "@material-ui/core/Slide";
 import Gavel from "@material-ui/icons/Gavel";
 import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
 
-const Register = ({ classes }) => {
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
+const Register = ({ classes, setNewUser }) => {
    const [username, setUsername] = useState("")
    const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
+   const [open, setOpen] = useState(false)
 
-  const handleSubmit = async (event, createUser) => {
+  const handleSubmit = (event, createUser) => {
     event.preventDefault()
-    const res = await createUser()
+    createUser()
   }
   return (
     <div className={classes.root}>
@@ -37,8 +42,13 @@ const Register = ({ classes }) => {
           Register
           </Typography>
         
-        <Mutation mutation={REGISTER_MUTATION}
+        <Mutation
+          mutation={REGISTER_MUTATION}
           variables={{ username, email, password }}
+          onCompleted={data => {
+            console.log({ data });
+            setOpen(true)
+          }}
         >
           {(createUser, { loading, error }) => {
           
@@ -46,51 +56,92 @@ const Register = ({ classes }) => {
               <form onSubmit={event => handleSubmit(createUser)} className={classes.form}>
                 <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="username">username</InputLabel>
-                  <Input id="username" onChange={event => setUsername(event.target.value)} />
+                  <Input
+                    id="username"
+                    onChange={event => setUsername(event.target.value)}
+                  />
                 </FormControl>
-                 <FormControl margin="normal" required fullWidth>
+                <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="email">Email</InputLabel>
-                  <Input id="email" type='email' onChange={event => setEmail(event.target.value)}/>
+                  <Input
+                    id="email"
+                    type='email'
+                    onChange={event => setEmail(event.target.value)}
+                  />
                 </FormControl>
-                 <FormControl margin="normal" required fullWidth>
+                <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input id="password" type='password' onChange={event => setPassword(event.target.value)}/>
+                  <Input
+                    id="password"
+                    type='password'
+                    onChange={event => setPassword(event.target.value)} />
                 </FormControl>
                 <Button
-                  className="submit"
                   type='submit'
                   fullWidth
                   variant="contained"
                   color="secondary"
+                  disabled=
+                  {loading
+                    || !username.trim()
+                    || !email.trim() ||
+                    !password.trim()
+                  }
+                  className={classes.submit}
                 >
-                  Register
+                  {loading ? "Registering..." : "Register"}
                 </Button>
                 <Button
-                   color="primary" variant="outlined" fullWidth>
+                  onCLick={() => setNewUser(false)}
+                  color="primary"
+                  variant="outlined"
+                  fullWidth
+                >
                   Previous user? Log in here
                 </Button>
+                {/* Error Handling */}
+                {error && <div>Error</div>}
               </form>
-            )
+            );
           }}
       </Mutation>
-
       </Paper>
+      <Dialog
+        open={open}
+        disableBackdropClick={true}
+        TransitionComponent={Transition}
+      >
+        <DialogTitle>
+          <VerifiedUserTwoTone className={classes.icon} />
+          New Account
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText> User Successfully Created! </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => setNewUser(false)}
+          >
+            Login
+          </Button>
+          </DialogActions>
+        </Dialog>
     </div>
   )
 };
 
 const REGISTER_MUTATION = gql`
-  mutation ($username: String!, $email: String!, $password: String!)
-  {
-    createUser(username: $username, email: $email, password: $password)
-    {
+  mutation ($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
       user {
         username
         email
       }
     }
   }
-`
+`;
 
 const styles = theme => ({
   root: {
