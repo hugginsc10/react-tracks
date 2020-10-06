@@ -13,7 +13,8 @@ const Error = ({ classes, error }) => {
       message={error.message}
       action={
         <Button
-          color="secondary"
+          variant="outlined"
+          color="primary"
           size="small"
           onClick={() => setOpen(false)}
         >
