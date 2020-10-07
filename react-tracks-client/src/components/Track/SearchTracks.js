@@ -31,7 +31,7 @@ const SearchTracks = ({ classes, setSearchResults }) => {
       {client => (
         <form onSubmit={event => handleSubmit(event, client)}>
           <Paper className={classes.root} elevation={1}>
-            <IconButton>
+            <IconButton  onClick={clearSearchInput}>
               <ClearIcon />
             </IconButton>
             <TextField
@@ -40,11 +40,11 @@ const SearchTracks = ({ classes, setSearchResults }) => {
               InputProps={{
                 disableUnderline: true
               }}
-              onChange={event => setSearch()}
+              onChange={event => setSearch(event.target.value)}
               value={search}
               inputRef={inputEl}
             />
-            <IconButton>
+            <IconButton type="submit">
               <SearchIcon />
             </IconButton>
           </Paper>

@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import withStyles from "@material-ui/core/styles/withStyles";
-import SearchTracks from '../components/Track/SearchTracks'
-import TrackList from '../components/Track/TrackList'
-import CreateTrack from '../components/Track/CreateTrack'
-import Loading from '../components/Shared/Loading'
-import Error from '../components/Shared/Error'
-
-
+import SearchTracks from "../components/Track/SearchTracks";
+import TrackList from "../components/Track/TrackList";
+import CreateTrack from "../components/Track/CreateTrack";
+import Loading from "../components/Shared/Loading";
+import Error from "../components/Shared/Error";
 const App = ({ classes }) => {
   const [searchResults, setSearchResults] = useState([])
   return (
