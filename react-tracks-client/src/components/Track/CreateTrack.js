@@ -31,7 +31,7 @@ const CreateTrack = ({ classes }) => {
   const handleAudioChange = event => {
     const selectedFile = event.target.files[0]
     const fileSizeLimit = 10000000;
-    if (selectedFIle && selectedFIle.size > fileSizeLimit) {
+    if (selectedFile && selectedFile.size > fileSizeLimit) {
       setFileError(`${selectedFile.name}: File size is too large`)
     } else {
       setFile(selectedFile);
@@ -103,7 +103,7 @@ const CreateTrack = ({ classes }) => {
           <DialogTitle>Create Track</DialogTitle>
           <DialogContent>
             <DialogContentText>
-                    Add a Title, Description & Audio File
+                    Add a Title, Description & Audio File (Under 10MBs)
             </DialogContentText>
                   
             <FormControl fullWidth>
