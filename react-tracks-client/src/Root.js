@@ -17,6 +17,8 @@ const Root = () => (
       if (loading) return <Loading />
       if (error) return <Error error={error} />
       const currentUser = data.me
+
+
       return (
         <Router>
           <UserContext.Provider value={currentUser}>
@@ -31,6 +33,21 @@ const Root = () => (
     }}
   </Query>
 )
+
+export const ME_QUERY = gql`{
+  {
+    me {
+      id
+      username
+      email
+      likeSet {
+        track {
+          id
+        }
+      }
+    }
+  }
+}`
 
 const GET_TRACKS_QUERY = gql`
 {
