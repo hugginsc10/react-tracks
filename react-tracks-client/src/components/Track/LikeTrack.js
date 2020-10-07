@@ -9,10 +9,13 @@ const LikeTrack = ({ classes, trackId, likeCount }) => {
   return (
     <Mutation
     mutation={CREATE_LIKE_MUTATION}
-    variables={{ trackId}}
+    variables={{ trackId }}
     >
       {createLike => (
         <IconButton
+          onClick={event => {
+            event.stopPropagation();
+          }}
           className={classes.iconButton}
         >
           {likeCount}
