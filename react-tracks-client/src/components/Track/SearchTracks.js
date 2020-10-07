@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ApolloConsumer } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -10,6 +10,13 @@ import SearchIcon from "@material-ui/icons/Search";
 
 const SearchTracks = ({ classes, setSearchResults }) => {
   const [search, setSearch] = useState("");
+  const inputEl = useRef()
+
+  const clearSearchInput = () => {
+    setSearchResults([])
+    setSearch("")
+    inputEl.current.focus();
+  }
 
   const handleSubmit = async (event, client) => {
     event.preventDefault();
@@ -17,7 +24,7 @@ const SearchTracks = ({ classes, setSearchResults }) => {
       query: SEARCH_TRACKS_QUERY,
       variables: { search }
     })
-    setSearchResults()
+    setSearchResults(res.data.tracks)
   }
   return (
     <ApolloConsumer>
@@ -34,6 +41,8 @@ const SearchTracks = ({ classes, setSearchResults }) => {
                 disableUnderline: true
               }}
               onChange={event => setSearch()}
+              value={search}
+              inputRef={inputEl}
             />
             <IconButton>
               <SearchIcon />
@@ -47,7 +56,19 @@ const SearchTracks = ({ classes, setSearchResults }) => {
 
 const SEARCH_TRACKS_QUERY = gql`
   query($search: String) {
-    tracks(search: String)
+    tracks(search: $search) {
+      id
+      title
+      description
+      url
+      likes {
+        id
+      }
+      postedBy {
+        id
+        username
+      }
+    }
   }
 `
 
