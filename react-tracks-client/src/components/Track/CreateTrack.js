@@ -37,26 +37,38 @@ const CreateTrack = ({ classes }) => {
       setFile(selectedFile);
       setFileError('')
     }
-    
-    setFile(selectedFile);
   }
 
   const handleAudioUpload = async () => {
     try {
-
-      const data = new FormData()
-      data.append('file', file)
-      data.append('resource_type', 'raw')
-      data.append('upload_preset', 'react-tracks')
-      data.append('cloud_name', 'vacheron')
-      const res = await axios.post('https://api.cloudinary.com/v1_1/vacheron/raw/upload', data)
-      return res.data.url
+      const { files } = document.querySelector('input[type="file"]')
+      const data = new FormData();
+      data.append('file', files[0]);
+      data.append('resource_type', 'raw');
+      data.append('upload_preset', 'react-tracks');
+      data.append('cloud_name', 'vacheron');
+      // const res = await axios.post(
+      //   "https://api.cloudinary.com/v1_1/vacheron/raw/upload",
+      //   data
+      //   );
+      // return res.data.url
+      const options = {
+        method: 'POST',
+        body: data,
+      };
+    return fetch('https://api.Cloudinary.com/v1_1/vacheron/raw/upload', options)
     } catch (err) {
       console.error('Error uploading file', err)
       setSubmitting(false)
     }
 
   }
+
+  const handleUpdateCache = (cache, { data: { createTrack } }) => {
+    const data = cache.readQuery({ query: GET_TRACKS_QUERY });
+    const tracks = data.tracks.concat(createTrack.track);
+    cache.writeQuery({ query: GET_TRACKS_QUERY, data: { tracks } });
+  };
 
   const handleSubmit = async (event, createTrack) => {
     event.preventDefault()
@@ -67,8 +79,8 @@ const CreateTrack = ({ classes }) => {
         title,
         description,
         url: uploadedUrl
-    }})
-  }
+    }});
+  };
   return (
     <>
       <Button
@@ -92,12 +104,13 @@ const CreateTrack = ({ classes }) => {
           setFile("")
           
         }}
-        refetchQueries={() => [{ query: GET_TRACKS_QUERY }]}
+        update={handleUpdateCache}
+        // refetchQueries={() => [{ query: GET_TRACKS_QUERY }]}
       >
         {(createTrack, { loading, error }) => {
           if (error) return <Error error={error}/>
-          return (
-          
+      
+      return (
       <Dialog open={open} className={classes.dialog}>
         <form onSubmit={event => handleSubmit(event, createTrack)}>
           <DialogTitle>Create Track</DialogTitle>
@@ -133,6 +146,7 @@ const CreateTrack = ({ classes }) => {
                 type="file"
                 accept="audio/mp3,audio/wav"
                 className={classes.input}
+                onChange={handleAudioChange}
               />
               <label htmlFor="audio">
                 <Button
@@ -140,7 +154,6 @@ const CreateTrack = ({ classes }) => {
                   color={file ? "secondary" : "inherit"}
                   component="span"
                   className={classes.button}
-                  onChange={handleAudioChange}
                 >
                   Audio File
                     <LibraryMusicIcon className={classes.icon}/>
@@ -168,9 +181,8 @@ const CreateTrack = ({ classes }) => {
               type="submit"
               className={classes.save}>
                     {submitting ? (
-                      <CircularProgress
-                        className={classes.save}
-                        size={24} /> ) : ("Add Track")}
+                      <CircularProgress className={classes.save} size={24} /> 
+                      ) : ("Add Track")}
                            
               </Button>
           </DialogActions>
@@ -184,14 +196,17 @@ const CreateTrack = ({ classes }) => {
 };
 
 const CREATE_TRACK_MUTATION = gql`
-  mutation ($title: String!, $description: String!, $url: String!) {
-    createTrack(title: $title, description: $description, url: $url)
-    {
+  mutation($title: String!, $description: String!, $url: String!) {
+    createTrack(title: $title, description: $description, url: $url){
       track {
         id
         title
         description
         url
+        postedBy {
+          id
+          username
+        }
       }
     }
   }

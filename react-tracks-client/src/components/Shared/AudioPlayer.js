@@ -7,6 +7,7 @@ const AudioPlayer = ({url}) => (
       height="30px"
       width="500px"
       controls={true}
+      playIcon
     />
   </div>
 )
