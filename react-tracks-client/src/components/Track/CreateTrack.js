@@ -192,10 +192,6 @@ const CREATE_TRACK_MUTATION = gql`
         title
         description
         url
-        postedBy {
-          id
-          username
-        }
       }
     }
   }
