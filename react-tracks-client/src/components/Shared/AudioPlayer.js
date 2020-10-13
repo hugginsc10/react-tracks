@@ -4,10 +4,9 @@ const AudioPlayer = ({url}) => (
   <div>
     <ReactPlayer
       url={url}
-      height="30px"
-      width="500px"
+      height="6vw"
+      width="100%"
       controls={true}
-      playIcon
     />
   </div>
 )

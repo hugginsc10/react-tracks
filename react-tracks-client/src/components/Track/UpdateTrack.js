@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Mutation } from 'react-apollo'
 import { gql } from "apollo-boost"
 import axios from 'axios'
@@ -17,16 +17,18 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
 import Error from '../Shared/Error'
-import { GET_TRACKS_QUERY } from '../../pages/App'
+import {UserContext} from '../../Root'
+
 
 const UpdateTrack = ({ classes, track }) => {
+  const currentUser = useContext(UserContext)
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState(track.title)
   const [description, setDescription] = useState(track.description)
   const [file, setFile] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [fileError, setFileError] = useState("")
-
+  const isCurrentUser = currentUser.id === track.postedBy.id
 
   const handleAudioChange = event => {
     const selectedFile = event.target.files[0]
@@ -37,25 +39,27 @@ const UpdateTrack = ({ classes, track }) => {
       setFile(selectedFile);
       setFileError('')
     }
-    
-    setFile(selectedFile);
   }
 
   const handleAudioUpload = async () => {
     try {
-
+      const { files } = document.querySelector('input[type="file"]')
       const data = new FormData()
       data.append('file', file)
       data.append('resource_type', 'raw')
       data.append('upload_preset', 'react-tracks')
       data.append('cloud_name', 'vacheron')
-      const res = await axios.post('https://api.cloudinary.com/v1_1/vacheron/raw/upload', data)
-      return res.data.url
+      // const res = await axios.post('https://api.cloudinary.com/v1_1/vacheron/raw/upload', data)
+      // return res.data.url
+      const options = {
+        method: 'POST',
+        body: data,
+      };
+      return fetch('https://api.Cloudinary.com/v1_1/vacheron/raw/upload', options)
     } catch (err) {
       console.error('Error uploading file', err)
       setSubmitting(false)
     }
-
   }
 
   const handleSubmit = async (event, updateTrack) => {
@@ -63,13 +67,11 @@ const UpdateTrack = ({ classes, track }) => {
     setSubmitting(true)
     const uploadedUrl = await handleAudioUpload()
     updateTrack({
-      variables: {
-        title,
-        description,
-        url: uploadedUrl
-    }})
+      variables: {trackId: track.id, title, description, url: uploadedUrl}
+    })
   }
-  return (
+  return ( 
+    isCurrentUser && (
     <>
       <IconButton onClick={() => setOpen(true)}>
         <EditIcon />
@@ -87,15 +89,14 @@ const UpdateTrack = ({ classes, track }) => {
           setFile("")
           
         }}
-        refetchQueries={() => [{ query: GET_TRACKS_QUERY }]}
       >
-        {(createTrack, { loading, error }) => {
+        {(updateTrack, { loading, error }) => {
           if (error) return <Error error={error}/>
-          return (
-          
+      
+      return (
       <Dialog open={open} className={classes.dialog}>
-        <form onSubmit={event => handleSubmit(event, createTrack)}>
-          <DialogTitle>Create Track</DialogTitle>
+        <form onSubmit={event => handleSubmit(event, updateTrack)}>
+          <DialogTitle>update Track</DialogTitle>
           <DialogContent>
             <DialogContentText>
                     Add a Title, Description & Audio File (Under 10MBs)
@@ -128,6 +129,7 @@ const UpdateTrack = ({ classes, track }) => {
                 type="file"
                 accept="audio/mp3,audio/wav"
                 className={classes.input}
+                onChange={handleAudioChange}
               />
               <label htmlFor="audio">
                 <Button
@@ -135,7 +137,6 @@ const UpdateTrack = ({ classes, track }) => {
                   color={file ? "secondary" : "inherit"}
                   component="span"
                   className={classes.button}
-                  onChange={handleAudioChange}
                 >
                   Audio File
                     <LibraryMusicIcon className={classes.icon}/>
@@ -165,7 +166,7 @@ const UpdateTrack = ({ classes, track }) => {
                     {submitting ? (
                       <CircularProgress
                         className={classes.save}
-                        size={24} /> ) : ("Add Track")}
+                        size={24} /> ) : ("Update Track")}
                            
               </Button>
           </DialogActions>
@@ -175,6 +176,7 @@ const UpdateTrack = ({ classes, track }) => {
         }}
     </Mutation>
     </>
+    )
   )
 };
 const UPDATE_TRACK_MUTATION = gql`

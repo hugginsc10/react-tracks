@@ -16,6 +16,7 @@ const App = ({ classes }) => {
       <SearchTracks setSearchResults={setSearchResults}/>
       <CreateTrack />
       <Query query={GET_TRACKS_QUERY}>
+      
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error error={error} />
