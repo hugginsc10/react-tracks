@@ -20,7 +20,6 @@ class Query(graphene.ObjectType):
     
     if user.is_anonymous:
       raise GraphQLError('Not Logged In!')
-    
     return user
 class CreateUser(graphene.Mutation):
   user = graphene.Field(UserType)
