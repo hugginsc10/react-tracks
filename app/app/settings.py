@@ -104,10 +104,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME' : 'react-trax',
-        'HOST': 'mongodb+srv://admin:qabIAiNlYnH26mC1@cluster0.uzvyu.mongodb.net/react-trax?retryWrites=true&w=majority',
-        'USER': 'admin',
-        'PASSWORD': 'qabIAiNlYnH26mC1'
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
