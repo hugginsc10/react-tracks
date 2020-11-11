@@ -78,7 +78,7 @@ const Login = ({ classes, setNewUser }) => {
                   variant="outlined"
                   fullWidth
                 >
-                  Previous user? Log in here
+                  New User? Register Here
                 </Button>
                 {/* Error Handling */}
                 {error && <Error error={error} />}

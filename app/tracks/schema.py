@@ -39,13 +39,14 @@ class CreateTrack(graphene.Mutation):
     title = graphene.String()
     description = graphene.String()
     url = graphene.String()
+    user = graphene.Int()
     
    def mutate(self, info, title, description, url):
     user = info.context.user
     if user.is_anonymous:
       raise GraphQLError('Log in to add a track')
     
-    track = Track(title=title, description=description, url=url, posted_by=user)
+    track = Track(title=title, description=description, url=url, user=user)
     track.save()
     return CreateTrack(track=track)
   
@@ -60,7 +61,7 @@ class DeleteTrack(graphene.Mutation):
     track = Track.objects.get(id=track_id)
       
     if track.posted_by != user:
-      raise GraphQLError('Not permitted to delte this track')
+      raise GraphQLError('Not permitted to delete this track')
     
     track.delete()
     return DeleteTrack(track_id=track_id)
