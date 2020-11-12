@@ -98,30 +98,27 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'trax',
+#         'USER': 'chas',
+#         'PASSWORD': 'trax',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'trax',
-        'USER': 'chas',
-        'PASSWORD': 'trax',
-        'HOST': 'localhost',
+        'NAME': 'deqfkkclfv6ii4',
+        'USER': '',
+        'PASSWORD': 'cudnnutsbmyalm',
+        'HOST': 'ec2-54-146-142-58.compute-1.amazonaws.com',
         'PORT': '5432'
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'CLIENT': {
-#             'name': 'cluster0',
-#             'host': "mongodb+srv://admin:Skye2021@cluster0.uzvyu.mongodb.net/Cluster0?retryWrites=true&w=majority",
-#             'port': 27017,
-#             'username': 'admin',
-#             'password': 'Skye2021',
-#             'authMechanism': 'SCRAM-SHA-1'
-#         }
-        
-#     }
-# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
