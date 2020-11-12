@@ -11,9 +11,9 @@ django = "*"
 graphene-django = "*"
 django-graphql-jwt = "*"
 django-cors-headers = "*"
-djongo = "*"
 dnspython = "*"
 psycopg2 = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.8"
