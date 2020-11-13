@@ -1,0 +1,15 @@
+{
+    "name": "datasets",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "",
+    "author": "Chas Huggins",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+      "heroku-prebuild": "NODE_ENV=production cd react-tracks-client/ && npm install && npm build && cd .."
+    },
+    "cacheDirectories": [
+      "react-tracks-client/node_modules"
+    ]
+  }
