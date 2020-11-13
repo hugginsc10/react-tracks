@@ -74,7 +74,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'tracks-backend.app.urls'
+
 
 TEMPLATES = [
     {
@@ -92,7 +93,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+WSGI_APPLICATION = 'tracks-backend.app.wsgi.application'
 
 
 # Database
