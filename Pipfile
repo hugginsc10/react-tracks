@@ -15,6 +15,7 @@ dnspython = "*"
 psycopg2 = "*"
 django-heroku = "*"
 gunicorn = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.8"
