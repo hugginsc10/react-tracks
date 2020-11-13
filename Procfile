@@ -1,1 +1,1 @@
-web gunicorn tracks-backend.wsgi:application --log-file--
+web gunicorn tracks-backend.wsgi:application 
