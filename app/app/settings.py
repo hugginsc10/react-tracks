@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import django_heroku
+import dj_database_url
 from pathlib import Path
-import dj-database-url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,8 +28,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'graphene_django',
     'tracks',
@@ -109,6 +108,8 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+# DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config(default='postgres://cudnnutsbmyalm:7864ab5483951a5db6c95c36dd76908b2c17a0bf42a23543c3ae5939a312cafa@ec2-54-146-142-58.compute-1.amazonaws.com:5432/deqfkkclfv6ii4')
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
