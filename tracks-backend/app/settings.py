@@ -67,6 +67,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST =  [
     'http://localhost:3000',
     'http://localhost:8000',
+    'https://react-trax.herokuapp.com',
 ]
 
 AUTHENTICATION_BACKENDS = [
