@@ -26,7 +26,7 @@ SECRET_KEY = 'j$zin@09jv9k*r-0#e-7%2w1#4b15#-_edbg$&8zt9*m!%m29^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'react-trax.herokuapp.com', '0.0.0.0']
 
 # Application definition
 
@@ -74,7 +74,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-ROOT_URLCONF = 'tracks-backend.app.urls'
+ROOT_URLCONF = 'app.urls'
 
 
 TEMPLATES = [
@@ -93,7 +93,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tracks-backend.app.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database
