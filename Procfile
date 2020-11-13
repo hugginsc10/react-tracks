@@ -1,1 +1,1 @@
-web gunicorn tracks-backend.wsgi:application 
+web gunicorn react-tracks.wsgi:application 
